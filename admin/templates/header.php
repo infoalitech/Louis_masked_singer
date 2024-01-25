@@ -1,6 +1,6 @@
 
 <?php
-$homePath = '/louis_music/admin';
+$homePath = '/louis_masked_singer/admin';
 session_start(); // Start the session
 
 // include $homePath.'autoload.php';
