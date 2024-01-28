@@ -69,7 +69,6 @@ class User extends BaseDatabaseModel {
         if (empty($this->username) || empty($this->password) || empty($this->email)) {
             return false; // Or handle the error as needed
         }
-        print("test2");;
 
         return $this->save();
     }
