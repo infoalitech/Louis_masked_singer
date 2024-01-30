@@ -1,66 +1,81 @@
 <?php
-include '../templates/header.php'; // Include the header template
-include '../classes/User.php'; // Include your user class file
+include_once '../templates/header.php';
+include_once '../classes/Celebrity.php';
 
-use classes\User;
-// Check if the round ID is provided in the URL
-if (isset($_GET['id'])) {
-    $userId = $_GET['id'];
+use classes\Celebrity;
 
-    $newUser = User::getUserById($userId);
 
-    if (!$newUser) {
-        // Handle the case where the round with the specified ID is not found
-        echo "User not found.";
+// Check if an ID parameter is provided in the URL
+if (isset($_GET['id']) && is_numeric($_GET['id'])) {
+    $celebrityId = $_GET['id'];
+
+    // Get the existing celebrity details
+    $existingCelebrity = Celebrity::getCelebrityById($celebrityId);
+
+    if ($existingCelebrity) {
+        // Celebrity found, process the form submission for updating
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $name = htmlspecialchars($_POST['name']);
+            $description = htmlspecialchars($_POST['description']);
+
+            // Handle image file upload
+            $imageUploadResult = $existingCelebrity->handleImageUpload('image', '../uploads/celebrities/');
+
+            if ($imageUploadResult['success']) {
+                $existingCelebrity->setName($name);
+                $existingCelebrity->setDescription($description);
+                $existingCelebrity->setImageUrl($imageUploadResult['file_path']);
+
+                // Update the celebrity in the database
+                if ($existingCelebrity->updateCelebrity($celebrityId)) {
+                    $_SESSION['success'] = 'Celebrity updated successfully!';
+                    // Redirect to the index page after successful update
+                    header('Location: index.php');
+                    exit();
+                } else {
+                    $_SESSION['error'] = 'Error updating the celebrity. Please try again.';
+                }
+            } else {
+                $_SESSION['error'] = $imageUploadResult['error_message'];
+            }
+        }
+    } else {
+        $_SESSION['error'] = 'Celebrity not found.';
+        header('Location: index.php');
         exit();
     }
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        // Form submitted, process the data
-        $username = $_POST['username'];
-        $password = $_POST['password'];
-        $email = $_POST['email'];
-
-
-        $newUser->setUsername($username);
-        $newUser->setEmail($email);
-        $newUser->setPassword($password);
-    
-        // Save the new user to the database
-        if ($newUser->updateUser($newUser->getId())) {
-            $_SESSION['success'] = 'User updated successfully!';
-            // Redirect to the index page after successful creation
-            header('Location: index.php');
-            exit();
-        } else {
-            $_SESSION['error'] = 'Error saving the round. Please try again.';
-        }
-    }
 } else {
-    // Redirect or display an error message if the round ID is not provided
-    $_SESSION['error'] = "Round ID is missing.";
-    header("Location: index.php"); // Redirect to index with error message
+    $_SESSION['error'] = 'Invalid celebrity ID.';
+    header('Location: index.php');
     exit();
 }
 ?>
 
 <div class="container mt-3">
-    <h2>Edit User</h2>
+    <h2>Update Celebrity</h2>
 
-    <form method="post">
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+        unset($_SESSION['error']);
+    }
+    ?>
+
+    <form method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" value="<?php echo $newUser->getEmail(); ?>" required>
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" value="<?= $existingCelebrity->getName(); ?>" required>
         </div>
         <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" value="<?php echo $newUser->getUsername(); ?>" required>
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" name="description" required><?= $existingCelebrity->getDescription(); ?></textarea>
         </div>
         <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" value="<?php echo $newUser->getPassword(); ?>" required>
+            <label for="image">Image:</label>
+            <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required>
         </div>
-        <button type="submit" class="btn btn-primary">Create User</button>
+        <button type="submit" class="btn btn-primary">Update Celebrity</button>
     </form>
 </div>
 
-<?php include '../templates/footer.php'; // Include the footer template ?>
+<?php include_once '../templates/footer.php'; ?>

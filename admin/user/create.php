@@ -1,6 +1,6 @@
 <?php
-include '../templates/header.php'; // Include the header template
-include '../classes/User.php'; // Include your user class file
+include_once '../templates/header.php'; // include_once the header template
+include_once '../classes/User.php'; // include_once your user class file
 
 use classes\User;
 
@@ -48,4 +48,4 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </form>
 </div>
 
-<?php include '../templates/footer.php'; // Include the footer template ?>
+<?php include_once '../templates/footer.php'; // include_once the footer template ?>

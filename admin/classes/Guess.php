@@ -1,25 +1,28 @@
 <?php
+namespace classes;
 
-class Guess {
-    private $guessId;
+include_once 'BaseDatabaseModel.php';
+
+class Guess extends BaseDatabaseModel {
+    protected static $tableName = 'clips'; // Specify the table name
+
+    private $id;
     private $roundId;
     private $playerName;
     private $guessedCelebrityId;
     private $isCorrect;
 
-    public function __construct($roundId, $playerName, $guessedCelebrityId, $isCorrect) {
-        $this->roundId = $roundId;
-        $this->playerName = $playerName;
-        $this->guessedCelebrityId = $guessedCelebrityId;
-        $this->isCorrect = $isCorrect;
+    public function __construct() {
+        parent::__construct();
     }
 
-    public function getGuessId() {
-        return $this->guessId;
+    // Getter and Setter methods for $id
+    public function getId() {
+        return $this->id;
     }
 
-    public function setGuessId($guessId) {
-        $this->guessId = $guessId;
+    public function setId($id) {
+        $this->id = $id;
     }
 
     public function getRoundId() {
@@ -52,6 +55,32 @@ class Guess {
 
     public function setCorrect($isCorrect) {
         $this->isCorrect = $isCorrect;
+    }
+
+    // Static method to get all users
+    public static function getAllGuesses() {
+        return parent::getAll();
+    }
+
+    // Static method to get a user by ID
+    public static function getGuessById($id) {
+        return parent::getById($id);
+    }
+
+    // Instance method to save a user
+    public function saveGuess() {
+
+        // Check if the required properties have values before saving
+        if (empty($this->roundId) || empty($this->playerName) || empty($this->guessedCelebrityId)  || empty($this->isCorrect)) {
+            return false; // Or handle the error as needed
+        }
+        
+        return $this->save();
+    }
+
+    // Instance method to update a user
+    public function updateGuess($id) {
+        return $this->update($id);
     }
 }
 

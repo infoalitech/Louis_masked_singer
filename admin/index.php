@@ -1,16 +1,16 @@
 <?php
 session_start(); // Start the session
 
-include 'templates/header.php'; // Include the header template
-include 'alert.php'; // Include the alert.php file
+include_once 'templates/header.php'; // include_once the header template
+include_once 'alert.php'; // include_once the alert.php file
 ?>
 
-<div class="jumbotron">
-    <h1 class="display-4">Welcome to the Round Game!</h1>
-    <p class="lead">This is a simple web application for playing the Round Game.</p>
-    <hr class="my-4">
-    <p>Get started by exploring the rounds or creating a new one.</p>
-    <a class="btn btn-primary btn-lg" href="round/index.php" role="button">Explore Rounds</a>
+<div class="jumbotron text-center">
+    <h1 class="display-4 animate__animated animate__fadeIn">Welcome to the Round Game!</h1>
+    <p class="lead animate__animated animate__fadeIn">This is a simple web application for playing the Round Game.</p>
+    <hr class="my-4 animate__animated animate__fadeIn">
+    <p class="animate__animated animate__fadeIn">Get started by exploring the rounds or creating a new one.</p>
+    <a class="btn btn-primary btn-lg animate__animated animate__fadeIn animate__hover__pulse" href="website/index.php" role="button">Explore Rounds</a>
 </div>
 
-<?php include 'templates/footer.php'; // Include the footer template ?>
+<?php include_once 'templates/footer.php'; // include_once the footer template ?>

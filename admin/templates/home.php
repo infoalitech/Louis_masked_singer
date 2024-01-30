@@ -1,5 +1,5 @@
 <?php
-    include 'header.php';
+    include_once 'header.php';
 ?>
 
 <!-- Add your home page content here -->
@@ -10,5 +10,5 @@
 </div>
 
 <?php
-    include 'footer.php';
+    include_once 'footer.php';
 ?>

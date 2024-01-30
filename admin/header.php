@@ -46,7 +46,7 @@
     </div>
 </nav>
 <?php
-    include 'alert.php';
+    include_once 'alert.php';
 
 
 ?>

@@ -1,29 +1,43 @@
-
 <?php
-include '../templates/header.php'; // Include the header template
-include '../classes/User.php'; // Include your user class file
+include_once '../templates/header.php';
+include_once '../classes/Celebrity.php';
 
-use classes\User;
-// Retrieve the list of users
-$users = User::getAll();
+use classes\Celebrity;
+
+
+// Get all celebrities from the database
+$celebrities = Celebrity::getAll();
 
 ?>
 
-
 <div class="container mt-3">
-    <h2>user List</h2>
-    <a href="create.php" class="btn btn-primary mb-2">Create New user</a>
-    <ul class="list-group">
-        <?php foreach ($users as $user) : ?>
-            <li class="list-group-item">
-                <a href="create.php?id=<?php echo $user->getId(); ?>">
-                    <?php print_r($user->username); ?>
-                </a>
-                <a href="edit.php?id=<?php echo $user->getId(); ?>" class="btn btn-warning btn-sm float-right ml-2">Edit</a>
-                <a href="delete_user.php?id=<?php echo $user->getId(); ?>" class="btn btn-danger btn-sm float-right">Delete</a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
+    <h2>Celebrities</h2>
+    <a href="create.php" class="btn btn-primary mb-2">Create New Celebrity</a>
+    <table class="table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Description</th>
+                <th>Image</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($celebrities as $celebrity) : ?>
+                <tr>
+                    <td><?= $celebrity->getId(); ?></td>
+                    <td><?= $celebrity->getName(); ?></td>
+                    <td><?= $celebrity->getDescription(); ?></td>
+                    <td><img src="<?= $celebrity->getImageUrl(); ?>" alt="Celebrity Image" style="max-width: 100px;"></td>
+                    <td>
+                        <a href="edit.php?id=<?php echo $celebrity->getId(); ?>" class="btn btn-warning btn-sm float-right ml-2">Edit</a>
+                        <a href="delete_celebrity.php?id=<?php echo $celebrity->getId(); ?>" class="btn btn-danger btn-sm float-right">Delete</a>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
 </div>
 
-<?php include '../templates/footer.php'; // Include the footer template ?>
+<?php include_once '../templates/footer.php'; ?>

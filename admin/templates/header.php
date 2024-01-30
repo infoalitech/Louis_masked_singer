@@ -1,18 +1,20 @@
-
 <?php
 $homePath = '/louis_masked_singer/admin';
 session_start(); // Start the session
 
-// include $homePath.'autoload.php';
+include_once '../config/database.php'; // include_once the configuration file
+include_once '../classes/Auth.php'; // Include your Auth class
+use classes\Auth;
+
+// Check if the user is not logged in, redirect to the login page
+// if (!Auth::isLoggedIn()) {
+//     header('Location: login.php');
+//     exit();
+// }
+
+
 // Set error reporting
 $rootPath = $_SERVER['DOCUMENT_ROOT'];
-
-
-include '../config/database.php'; // Include the configuration file
-
-
-
-
 
 if ($errorReportingConfig['display_errors']) {
     error_reporting($errorReportingConfig['error_reporting']);
@@ -32,29 +34,53 @@ if ($errorReportingConfig['display_errors']) {
 </head>
 <body>
 
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Your Game Logo/Title</a>
-    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-        <ul class="navbar-nav ml-auto">
-            <li class="nav-item">
-                <a class="nav-link" href="<?php echo $homePath; ?>/index.php">Home</a>
-            </li>
-            <li class="nav-item">
+
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">Your Game Logo/Title</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo $homePath; ?>/index.php">Home</a>
+                </li>
+                <?php
+                    // Navigation will be displayed only if the user is logged in
+                    // if (Auth::isLoggedIn()) {
+                ?>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo $homePath; ?>/round/index.php">Rounds</a>
-            </li>
-            <li class="nav-item">
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo $homePath; ?>/clip/index.php">Clips</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo $homePath; ?>/celebrity/index.php">Celebrities</a>
+                </li>
+                <li class="nav-item">
                     <a class="nav-link" href="<?php echo $homePath; ?>/user/index.php">Users</a>
-            </li>
-            <!-- Add more navigation links as needed -->
-        </ul>
-    </div>
-</nav>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo $homePath; ?>/auth/logout.php">Logout</a>
+                </li>
+                <?php
+                    // }else{
+                ?>
+
+                <li class="nav-item">
+                    <a class="nav-link" href="<?php echo $homePath; ?>/auth/logout.php">Login</a>
+                </li>
+                <?php
+                    // }
+                ?>
+                <!-- Add more navigation links as needed -->
+            </ul>
+        </div>
+    </nav>
 
 
 <div class="container mt-4">
-    <?php include 'alert.php'; // Include the alert.php file ?> 
+    <?php include_once 'alert.php'; // include_once the alert.php file ?> 
 
     <!-- Content of the page will go here -->

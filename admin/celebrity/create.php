@@ -1,51 +1,65 @@
 <?php
-include '../templates/header.php'; // Include the header template
-include '../classes/User.php'; // Include your user class file
+include_once '../templates/header.php';
+include_once '../classes/Celebrity.php';
 
-use classes\User;
+use classes\Celebrity;
+
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Form submitted, process the data
-    $username = $_POST['username'];
-    $password = $_POST['password'];
-    $email = $_POST['email'];
+    $name = htmlspecialchars($_POST['name']);
+    $description = htmlspecialchars($_POST['description']);
 
-    // Create a new User instance
-    $newUser = new User();
-    $newUser->setUsername($username);
-    $newUser->setEmail($email);
-    $newUser->setPassword($password);
-   
-    // Save the new user to the database
-    if ($newUser->saveUser()) {
-        $_SESSION['success'] = 'User created successfully!';
-        // Redirect to the index page after successful creation
-        header('Location: index.php');
-        exit();
+    $newCelebrity = new Celebrity();
+    $imageUploadResult = $newCelebrity->handleImageUpload('image', '../uploads/celebrities/');
+    if ($imageUploadResult['success']) {
+        // Image uploaded successfully, create a new Celebrity instance
+
+        $newCelebrity->setName($name);
+        $newCelebrity->setDescription($description);
+        $newCelebrity->setImageUrl($imageUploadResult['file_path']);
+
+        // Save the new celebrity to the database
+        if ($newCelebrity->saveCelebrity()) {
+            $_SESSION['success'] = 'Celebrity created successfully!';
+            // Redirect to the index page after successful creation
+            header('Location: index.php');
+            exit();
+        } else {
+            $_SESSION['error'] = 'Error saving the celebrity. Please try again.';
+        }
     } else {
-        $_SESSION['error'] = 'Error saving the round. Please try again.';
+        $_SESSION['error'] = $imageUploadResult['error_message'];
     }
 }
+
 ?>
 
 <div class="container mt-3">
-    <h2>Create New Round</h2>
+    <h2>Create New Celebrity</h2>
 
-    <form method="post">
+    <?php
+    if (isset($_SESSION['error'])) {
+        echo '<div class="alert alert-danger">' . $_SESSION['error'] . '</div>';
+        unset($_SESSION['error']);
+    }
+    ?>
+
+    <form method="post" enctype="multipart/form-data">
         <div class="form-group">
-            <label for="email">Email:</label>
-            <input type="email" class="form-control" id="email" name="email" required>
+            <label for="name">Name:</label>
+            <input type="text" class="form-control" id="name" name="name" required>
         </div>
         <div class="form-group">
-            <label for="username">Username:</label>
-            <input type="text" class="form-control" id="username" name="username" required>
+            <label for="description">Description:</label>
+            <textarea class="form-control" id="description" name="description" required></textarea>
         </div>
         <div class="form-group">
-            <label for="password">Password:</label>
-            <input type="password" class="form-control" id="password" name="password" required>
+            <label for="image">Image:</label>
+            <input type="file" class="form-control-file" id="image" name="image" accept="image/*" required>
         </div>
-        <button type="submit" class="btn btn-primary">Create User</button>
+        <button type="submit" class="btn btn-primary">Create Celebrity</button>
     </form>
 </div>
 
-<?php include '../templates/footer.php'; // Include the footer template ?>
+<?php include_once '../templates/footer.php'; ?>

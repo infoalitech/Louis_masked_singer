@@ -1,7 +1,7 @@
 <?php
 namespace classes;
 
-include 'BaseDatabaseModel.php';
+include_once 'BaseDatabaseModel.php';
 
 class User extends BaseDatabaseModel {
     protected static $tableName = 'users'; // Specify the table name
@@ -51,6 +51,13 @@ class User extends BaseDatabaseModel {
         $this->email = $email;
     }
 
+
+    public static function getUserByUsername($username) {
+        $users = static::getByColumn('username', $username);
+
+        // Assuming usernames are unique, so we return the first user (if found)
+        return !empty($users) ? $users[0] : null;
+    }
     // Static method to get all users
     public static function getAllUsers() {
         return parent::getAll();
@@ -63,7 +70,6 @@ class User extends BaseDatabaseModel {
 
     // Instance method to save a user
     public function saveUser() {
-        print("test");;
 
         // Check if the required properties have values before saving
         if (empty($this->username) || empty($this->password) || empty($this->email)) {

@@ -1,6 +1,6 @@
 <?php
-include '../../templates/header.php';
-include '../../classes/Round.php';
+include_once '../../templates/header.php';
+include_once '../../classes/Round.php';
 
 use classes\Round;
 
@@ -57,4 +57,4 @@ if (isset($_GET['id'])) {
     </form>
 </div>
 
-<?php include '../templates/footer.php'; ?>
+<?php include_once '../templates/footer.php'; ?>

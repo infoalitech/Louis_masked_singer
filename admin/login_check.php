@@ -2,8 +2,8 @@
 // Start or resume a session
 session_start();
 
-// Include the database connection file
-include 'connection.php';
+// include_once the database connection file
+include_once 'connection.php';
 
 // Check if the form is submitted
 if ($_SERVER["REQUEST_METHOD"] == "POST") {

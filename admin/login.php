@@ -2,8 +2,8 @@
 // Start or resume a session
 session_start();
 
-// Include the database connection file
-include 'connection.php';
+// include_once the database connection file
+include_once 'connection.php';
 
 // Check if the user is already logged in, redirect to index.php
 if (isset($_SESSION['username'])) {
@@ -12,7 +12,7 @@ if (isset($_SESSION['username'])) {
 }
 ?>
 
-<?php include 'header.php'; ?>
+<?php include_once 'header.php'; ?>
 
 <!-- Main content for the login page goes here -->
 
@@ -45,4 +45,4 @@ if (isset($_SESSION['username'])) {
     </div>
 </div>
 
-<?php include 'footer.php'; ?>
+<?php include_once 'footer.php'; ?>
